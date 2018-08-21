@@ -8,17 +8,10 @@ import 'package:movies_streams/models/movie_card.dart';
 import 'package:movies_streams/pages/details.dart';
 import 'package:movies_streams/pages/filters.dart';
 import 'package:movies_streams/widgets/favorite_icon.dart';
-import 'package:movies_streams/widgets/list_summary.dart';
+import 'package:movies_streams/widgets/filters_summary.dart';
 import 'package:movies_streams/widgets/movie_card_widget.dart';
 
-class ListPage extends StatefulWidget {
-  @override
-  ListPageState createState() {
-    return new ListPageState();
-  }
-}
-
-class ListPageState extends State<ListPage> {
+class ListPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -52,7 +45,7 @@ class ListPageState extends State<ListPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          ListSummary(),
+          FiltersSummary(),
           Expanded(
             // Display an infinite GridView with the list of all movies in the catalog,
             // that meet the filters
@@ -66,7 +59,7 @@ class ListPageState extends State<ListPage> {
                       childAspectRatio: 1.0,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return _buildMovieCard(movieBloc, index, snapshot.data, favoriteBloc.outFavorites);
+                      return _buildMovieCard(context, movieBloc, index, snapshot.data, favoriteBloc.outFavorites);
                     },
                     itemCount: (snapshot.data == null ? 0 : snapshot.data.length) + 30,
                   );
@@ -78,7 +71,7 @@ class ListPageState extends State<ListPage> {
     );
   }
 
-  Widget _buildMovieCard(
+  Widget _buildMovieCard(BuildContext context,
       MovieCatalogBloc movieBloc, int index, List<MovieCard> movieCards, Stream<List<MovieCard>> favoritesStream) {
     // Notify the MovieCatalogBloc that we are rendering the MovieCard[index]
     movieBloc.inMovieIndex.add(index);

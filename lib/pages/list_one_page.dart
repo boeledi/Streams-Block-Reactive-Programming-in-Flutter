@@ -7,18 +7,11 @@ import 'package:movies_streams/blocs/movie_catalog_bloc.dart';
 import 'package:movies_streams/models/movie_card.dart';
 import 'package:movies_streams/pages/filters.dart';
 import 'package:movies_streams/widgets/favorite_icon.dart';
-import 'package:movies_streams/widgets/list_summary.dart';
+import 'package:movies_streams/widgets/filters_summary.dart';
 import 'package:movies_streams/widgets/movie_card_widget.dart';
 import 'package:movies_streams/widgets/movie_details_container.dart';
 
-class ListOnePage extends StatefulWidget {
-  @override
-  ListOnePageState createState() {
-    return new ListOnePageState();
-  }
-}
-
-class ListOnePageState extends State<ListOnePage> {
+class ListOnePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<MovieDetailsContainerState> _movieDetailsKey =
       new GlobalKey<MovieDetailsContainerState>();
@@ -55,7 +48,7 @@ class ListOnePageState extends State<ListOnePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           // Displays the filters currently being defined
-          ListSummary(),
+          FiltersSummary(),
           Container(
             height: 150.0,
             // Horizontal list of all movies in the catalog

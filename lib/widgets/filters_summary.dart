@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movies_streams/blocs/bloc_provider.dart';
 import 'package:movies_streams/blocs/movie_catalog_bloc.dart';
 
-class ListSummary extends StatelessWidget {
-  ListSummary({
+class FiltersSummary extends StatelessWidget {
+  FiltersSummary({
     Key key,
   }):super(key: key);
 
