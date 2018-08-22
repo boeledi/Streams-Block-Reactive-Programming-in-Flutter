@@ -4,4 +4,5 @@ Sample application to illustrate the article available on [didierboelens.com](ht
 
 This article is an introduction to the notions of **Streams**, **BLoC Pattern** and **Reactive Programming** in Flutter.
 
-<img src="https://www.didierboelens.com/images/streams_app_1.gif" width="350" />
+<img src="https://www.didierboelens.com/images/streams_app_1.gif" width="350" alt="Flutter - Reactive Programming - BLoC - Streams" />
+<br/>
