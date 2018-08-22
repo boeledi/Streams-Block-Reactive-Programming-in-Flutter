@@ -30,14 +30,14 @@ class FavoriteBloc implements BlocBase {
   /// Interface that allows to get the total number of favorites
   ///
   BehaviorSubject<int> _favoriteTotalController = new BehaviorSubject<int>(seedValue: 0);
-  Sink<int> get inTotalFavorites => _favoriteTotalController.sink;
+  Sink<int> get _inTotalFavorites => _favoriteTotalController.sink;
   Stream<int> get outTotalFavorites => _favoriteTotalController.stream;
 
   ///
   /// Interface that allows to get the list of all favorite movies
   ///
   BehaviorSubject<List<MovieCard>> _favoritesController = new BehaviorSubject<List<MovieCard>>(seedValue: []);
-  Sink<List<MovieCard>> get inFavorites =>_favoritesController.sink;
+  Sink<List<MovieCard>> get _inFavorites =>_favoritesController.sink;
   Stream<List<MovieCard>> get outFavorites =>_favoritesController.stream;
 
   ///
@@ -73,9 +73,9 @@ class FavoriteBloc implements BlocBase {
   void _notify(){
     // Send to whomever is interested...
     // The total number of favorites
-    inTotalFavorites.add(_favorites.length);
+    _inTotalFavorites.add(_favorites.length);
 
     // The new list of all favorite movies
-    inFavorites.add(UnmodifiableListView(_favorites));
+    _inFavorites.add(UnmodifiableListView(_favorites));
   }
 }

@@ -17,17 +17,17 @@ class MovieCatalogBloc implements BlocBase {
   ///
   /// Genre
   ///
-  int genre = 28;
+  int _genre = 28;
 
   ///
   /// Release date min
   /// 
-  int minReleaseDate = 2000;
+  int _minReleaseDate = 2000;
 
   ///
   /// Release date max
   /// 
-  int maxReleaseDate = 2005;
+  int _maxReleaseDate = 2005;
 
   ///
   /// Total number of movies in the catalog
@@ -52,7 +52,7 @@ class MovieCatalogBloc implements BlocBase {
   /// We are going to need the list of movies to be displayed
   ///
   PublishSubject<List<MovieCard>> _moviesController = PublishSubject<List<MovieCard>>();
-  Sink<List<MovieCard>> get inMoviesList => _moviesController.sink;
+  Sink<List<MovieCard>> get _inMoviesList => _moviesController.sink;
   Stream<List<MovieCard>> get outMoviesList => _moviesController.stream;
 
   ///
@@ -71,11 +71,11 @@ class MovieCatalogBloc implements BlocBase {
   BehaviorSubject<int> _totalMoviesController = BehaviorSubject<int>(seedValue: 0);
   BehaviorSubject<List<int>> _releaseDatesController = BehaviorSubject<List<int>>(seedValue: <int>[2000,2005]);
   BehaviorSubject<int> _genreController = BehaviorSubject<int>(seedValue: 28);
-  Sink<int> get inTotalMovies => _totalMoviesController.sink;
+  Sink<int> get _inTotalMovies => _totalMoviesController.sink;
   Stream<int> get outTotalMovies => _totalMoviesController.stream;
-  Sink<List<int>> get inReleaseDates => _releaseDatesController.sink;
+  Sink<List<int>> get _inReleaseDates => _releaseDatesController.sink;
   Stream<List<int>> get outReleaseDates => _releaseDatesController.stream;
-  Sink<int> get inGenre => _genreController.sink;
+  Sink<int> get _inGenre => _genreController.sink;
   Stream<int> get outGenre => _genreController.stream;
 
   ///
@@ -142,9 +142,9 @@ class MovieCatalogBloc implements BlocBase {
           _pagesBeingFetched.add(pageIndex);
           // Fetch it
           api.pagedList(pageIndex: pageIndex,
-                        genre: genre,
-                        minYear: minReleaseDate,
-                        maxYear: maxReleaseDate)
+                        genre: _genre,
+                        minYear: _minReleaseDate,
+                        maxYear: _maxReleaseDate)
               .then((MoviePageResult fetchedPage) => _handleFetchedPage(fetchedPage, pageIndex));
         }
       }
@@ -191,12 +191,12 @@ class MovieCatalogBloc implements BlocBase {
     // and notify who might be interested in knowing it
     if (_totalMovies == -1){
       _totalMovies = page.totalResults;
-      inTotalMovies.add(_totalMovies);
+      _inTotalMovies.add(_totalMovies);
     }
 
     // Only notify when there are movies
     if (movies.length > 0){
-      inMoviesList.add(UnmodifiableListView<MovieCard>(movies));
+      _inMoviesList.add(UnmodifiableListView<MovieCard>(movies));
     }
   }
 
@@ -205,9 +205,9 @@ class MovieCatalogBloc implements BlocBase {
   ///
   void _handleFilters(MovieFilters result){
     // First, let's record the new filter information
-    minReleaseDate = result.minReleaseDate;
-    maxReleaseDate = result.maxReleaseDate;
-    genre = result.genre;
+    _minReleaseDate = result.minReleaseDate;
+    _maxReleaseDate = result.maxReleaseDate;
+    _genre = result.genre;
 
     // Then, we need to reset
     _totalMovies = -1;
@@ -215,11 +215,11 @@ class MovieCatalogBloc implements BlocBase {
     _pagesBeingFetched.clear();
 
     // Let's notify who needs to know
-    inGenre.add(genre);
-    inReleaseDates.add(<int>[minReleaseDate, maxReleaseDate]);
-    inTotalMovies.add(0);
+    _inGenre.add(_genre);
+    _inReleaseDates.add(<int>[_minReleaseDate, _maxReleaseDate]);
+    _inTotalMovies.add(0);
 
     // we need to tell about a change so that we pick another list of movies
-    inMoviesList.add(<MovieCard>[]);
+    _inMoviesList.add(<MovieCard>[]);
   }
 }

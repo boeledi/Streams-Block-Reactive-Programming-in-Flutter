@@ -6,7 +6,7 @@ import 'package:movies_streams/blocs/favorite_bloc.dart';
 import 'package:movies_streams/blocs/movie_catalog_bloc.dart';
 import 'package:movies_streams/models/movie_card.dart';
 import 'package:movies_streams/pages/filters.dart';
-import 'package:movies_streams/widgets/favorite_icon.dart';
+import 'package:movies_streams/widgets/favorite_button.dart';
 import 'package:movies_streams/widgets/filters_summary.dart';
 import 'package:movies_streams/widgets/movie_card_widget.dart';
 import 'package:movies_streams/widgets/movie_details_container.dart';
@@ -28,13 +28,7 @@ class ListOnePage extends StatelessWidget {
         actions: <Widget>[
           // Icon that gives direct access to the favorites
           // It also displays "real-time" the number of favorites
-          StreamBuilder<int>(
-            stream: favoriteBloc.outTotalFavorites,
-            initialData: 0,
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot){
-              return FavoriteIcon(counter: snapshot.data);
-            }
-          ),
+          FavoriteButton(child: const Icon(Icons.favorite),),
           // Icon to open the filters
           IconButton(
             icon: const Icon(Icons.more_horiz),

@@ -157,6 +157,10 @@ class FiltersPageState extends State<FiltersPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
         onPressed: () {
+          //
+          // When the user accepts the changes to the filters,
+          // we need to send the new filters to the MovieCatalogBloc filters sink.
+          //
           _movieBloc.inFilters.add(MovieFilters(
               minReleaseDate: _minReleaseDate.round(),
               maxReleaseDate: _maxReleaseDate.round(),
