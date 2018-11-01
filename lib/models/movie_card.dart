@@ -1,5 +1,5 @@
 
-class MovieCard {
+class MovieCard extends Object {
   final int id;
   final voteAverage;
   final String title;
@@ -14,4 +14,10 @@ class MovieCard {
       title = json['title'],
       posterPath = json['poster_path'],
       overview = json['overview'];
+
+  @override
+  bool operator==(dynamic other) => identical(this, other) || this.id == other.id;
+
+  @override
+  int get hashCode => id;
 }
