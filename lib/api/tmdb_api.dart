@@ -1,7 +1,10 @@
+
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:movies_streams/api/tmdb_api_key.dart';
 import 'package:movies_streams/models/movie_genres_list.dart';
 import 'package:movies_streams/models/movie_page_result.dart';
 
@@ -12,7 +15,6 @@ import 'package:movies_streams/models/movie_page_result.dart';
 /// 
 
 class TmdbApi {
-  static const String TMDB_API_KEY = "PUT YOUR KEY, HERE";
   static const String baseUrl = 'api.themoviedb.org';
   final String imageBaseUrl = 'http://image.tmdb.org/t/p/w185/';
   final _httpClient = new HttpClient();
@@ -29,7 +31,7 @@ class TmdbApi {
       baseUrl,
       '3/discover/$type',
       <String, String>{
-        'api_key': TMDB_API_KEY,
+        'api_key': tmdbApiKey,
         'language': 'en-US',
         'sort_by': 'popularity.desc',
         'include_adult': 'false',
@@ -58,7 +60,7 @@ class TmdbApi {
       baseUrl,
       '3/genre/$type/list',
       <String, String>{
-        'api_key': TMDB_API_KEY,
+        'api_key': tmdbApiKey,
         'language': 'en-US',
       },
     );
