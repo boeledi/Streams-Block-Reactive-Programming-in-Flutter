@@ -12,8 +12,7 @@ import 'package:movies_streams/models/movie_page_result.dart';
 ///
 
 class TmdbApi {
-  // static const String TMDB_API_KEY = "PUT YOUR KEY, HERE";
-  static const String TMDB_API_KEY = "16d95c54251452dce44e0030c9777a2f";
+  static const String TMDB_API_KEY = "PUT YOUR KEY, HERE";
   static const String baseUrl = 'api.themoviedb.org';
   final String imageBaseUrl = 'http://image.tmdb.org/t/p/w185/';
   final _httpClient = HttpClient();
