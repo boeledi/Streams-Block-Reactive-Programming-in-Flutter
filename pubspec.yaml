@@ -1,19 +1,19 @@
 name: movies_streams
 description: Project aimed at explaining Streams and BLoC.
 author: Didier Boelens <mail@didierboelens.com>
+version: 0.0.2
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^0.1.2
-  rxdart: ^0.18.1
-  flutter_range_slider: ^0.0.4
+  cupertino_icons:
+  rxdart:
   
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
 flutter:
   uses-material-design: true
 

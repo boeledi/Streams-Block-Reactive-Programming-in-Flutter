@@ -14,14 +14,16 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: Text('Movies List'),
               onPressed: () {
                 _openPage(context);
               },
             ),
-            FavoriteButton(child: Text('Favorite Movies'),),
-            RaisedButton(
+            FavoriteButton(
+              child: Text('Favorite Movies'),
+            ),
+            ElevatedButton(
               child: Text('One Page'),
               onPressed: () {
                 _openOnePage(context);
@@ -33,10 +35,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-
   void _openPage(BuildContext context) {
-    Navigator
-        .of(context)
+    Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider<MovieCatalogBloc>(
         bloc: MovieCatalogBloc(),
@@ -46,8 +46,7 @@ class HomePage extends StatelessWidget {
   }
 
   void _openOnePage(BuildContext context) {
-    Navigator
-        .of(context)
+    Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider<MovieCatalogBloc>(
         bloc: MovieCatalogBloc(),

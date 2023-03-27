@@ -9,11 +9,11 @@ import 'package:movies_streams/models/movie_card.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   MovieDetailsWidget({
-    Key key,
-    this.movieCard,
-    this.boxFit: BoxFit.cover,
-    @required this.favoritesStream,
-  }) : super(key: key);
+    super.key,
+    required this.favoritesStream,
+    required this.movieCard,
+    this.boxFit = BoxFit.cover,
+  });
 
   final MovieCard movieCard;
   final BoxFit boxFit;
@@ -24,7 +24,7 @@ class MovieDetailsWidget extends StatefulWidget {
 }
 
 class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
-  FavoriteMovieBloc _bloc;
+  late FavoriteMovieBloc _bloc;
 
   ///
   /// In order to determine whether this particular Movie is
@@ -32,7 +32,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   /// that gives us the list of all favorites to THIS instance
   /// of the BLoC
   ///
-  StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
@@ -67,13 +67,13 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   }
 
   void _disposeBloc() {
-    _subscription.cancel();
+    _subscription?.cancel();
     _bloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context);
+    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context)!;
 
     return SingleChildScrollView(
       child: Column(
@@ -94,14 +94,14 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                 StreamBuilder<bool>(
                   stream: _bloc.outIsFavorite,
                   initialData: false,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<bool> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
                     return Positioned(
                       top: 16.0,
                       right: 16.0,
                       child: InkWell(
                         onTap: () {
-                          if (snapshot.data) {
+                          if (snapshot.data == true) {
                             bloc.inRemoveFavorite.add(widget.movieCard);
                           } else {
                             bloc.inAddFavorite.add(widget.movieCard);
@@ -114,10 +114,12 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                             ),
                             padding: const EdgeInsets.all(4.0),
                             child: Icon(
-                              snapshot.data
+                              snapshot.data == true
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                              color: snapshot.data ? Colors.red : Colors.white,
+                              color: snapshot.data == true
+                                  ? Colors.red
+                                  : Colors.white,
                             )),
                       ),
                     );

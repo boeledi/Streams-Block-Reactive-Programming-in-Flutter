@@ -6,9 +6,9 @@ import 'package:movies_streams/widgets/movie_details_widget.dart';
 
 class DetailsPage extends StatelessWidget {
   DetailsPage({
-    Key key,
-    this.data,
-  }) : super(key: key);
+    super.key,
+    required this.data,
+  });
 
   final MovieCard data;
 
@@ -20,7 +20,7 @@ class DetailsPage extends StatelessWidget {
       ),
       body: MovieDetailsWidget(
         movieCard: data,
-        favoritesStream: BlocProvider.of<FavoriteBloc>(context).outFavorites, 
+        favoritesStream: BlocProvider.of<FavoriteBloc>(context)!.outFavorites,
       ),
     );
   }

@@ -12,13 +12,13 @@ import 'package:movies_streams/widgets/filters_summary.dart';
 import 'package:movies_streams/widgets/movie_card_widget.dart';
 
 class ListPage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final MovieCatalogBloc movieBloc =
-        BlocProvider.of<MovieCatalogBloc>(context);
-    final FavoriteBloc favoriteBloc = BlocProvider.of<FavoriteBloc>(context);
+        BlocProvider.of<MovieCatalogBloc>(context)!;
+    final FavoriteBloc favoriteBloc = BlocProvider.of<FavoriteBloc>(context)!;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -32,7 +32,7 @@ class ListPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.more_horiz),
             onPressed: () {
-              _scaffoldKey.currentState.openEndDrawer();
+              _scaffoldKey.currentState?.openEndDrawer();
             },
           ),
         ],
@@ -58,7 +58,8 @@ class ListPage extends StatelessWidget {
                           snapshot.data, favoriteBloc.outFavorites);
                     },
                     itemCount:
-                        (snapshot.data == null ? 0 : snapshot.data.length) + 30,
+                        (snapshot.data == null ? 0 : snapshot.data!.length) +
+                            30,
                   );
                 }),
           ),
@@ -72,13 +73,13 @@ class ListPage extends StatelessWidget {
       BuildContext context,
       MovieCatalogBloc movieBloc,
       int index,
-      List<MovieCard> movieCards,
+      List<MovieCard>? movieCards,
       Stream<List<MovieCard>> favoritesStream) {
     // Notify the MovieCatalogBloc that we are rendering the MovieCard[index]
     movieBloc.inMovieIndex.add(index);
 
     // Get the MovieCard data
-    final MovieCard movieCard =
+    final MovieCard? movieCard =
         (movieCards != null && movieCards.length > index)
             ? movieCards[index]
             : null;
@@ -94,8 +95,7 @@ class ListPage extends StatelessWidget {
         movieCard: movieCard,
         favoritesStream: favoritesStream,
         onPressed: () {
-          Navigator
-              .of(context)
+          Navigator.of(context)
               .push(MaterialPageRoute(builder: (BuildContext context) {
             return DetailsPage(
               data: movieCard,

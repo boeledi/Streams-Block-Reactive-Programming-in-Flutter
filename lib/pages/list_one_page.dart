@@ -12,14 +12,15 @@ import 'package:movies_streams/widgets/movie_card_widget.dart';
 import 'package:movies_streams/widgets/movie_details_container.dart';
 
 class ListOnePage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<MovieDetailsContainerState> _movieDetailsKey =
-      new GlobalKey<MovieDetailsContainerState>();
+      GlobalKey<MovieDetailsContainerState>();
 
   @override
   Widget build(BuildContext context) {
-    final MovieCatalogBloc movieBloc = BlocProvider.of<MovieCatalogBloc>(context);
-    final FavoriteBloc favoriteBloc = BlocProvider.of<FavoriteBloc>(context);
+    final MovieCatalogBloc movieBloc =
+        BlocProvider.of<MovieCatalogBloc>(context)!;
+    final FavoriteBloc favoriteBloc = BlocProvider.of<FavoriteBloc>(context)!;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -28,12 +29,14 @@ class ListOnePage extends StatelessWidget {
         actions: <Widget>[
           // Icon that gives direct access to the favorites
           // It also displays "real-time" the number of favorites
-          FavoriteButton(child: const Icon(Icons.favorite),),
+          FavoriteButton(
+            child: const Icon(Icons.favorite),
+          ),
           // Icon to open the filters
           IconButton(
             icon: const Icon(Icons.more_horiz),
             onPressed: () {
-              _scaffoldKey.currentState.openEndDrawer();
+              _scaffoldKey.currentState?.openEndDrawer();
             },
           ),
         ],
@@ -54,11 +57,12 @@ class ListOnePage extends StatelessWidget {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      return _buildMovieCard(movieBloc, index, snapshot.data,
+                      return _buildMovieCard(movieBloc, index, snapshot.data!,
                           favoriteBloc.outFavorites);
                     },
                     itemCount:
-                        (snapshot.data == null ? 0 : snapshot.data.length) + 30,
+                        (snapshot.data == null ? 0 : snapshot.data!.length) +
+                            30,
                   );
                 }),
           ),
@@ -80,15 +84,14 @@ class ListOnePage extends StatelessWidget {
   }
 
   Widget _buildMovieCard(MovieCatalogBloc movieBloc, int index,
-      List<MovieCard> movieCards, Stream<List<MovieCard>> favoritesStream) {
+      List<MovieCard>? movieCards, Stream<List<MovieCard>> favoritesStream) {
     // Notify the MovieCatalogBloc that we are rendering the MovieCard[index]
     movieBloc.inMovieIndex.add(index);
 
     // Get the MovieCard data
-    final MovieCard movieCard =
-        (movieCards != null && movieCards.length > index)
-            ? movieCards[index]
-            : null;
+    MovieCard? movieCard = (movieCards != null && movieCards.length > index)
+        ? movieCards[index]
+        : null;
 
     // If the movie card is not yet available, display a progress indicator
     if (movieCard == null) {
@@ -106,7 +109,7 @@ class ListOnePage extends StatelessWidget {
         favoritesStream: favoritesStream,
         noHero: true,
         onPressed: () {
-          _movieDetailsKey.currentState.movieCard = movieCard;
+          _movieDetailsKey.currentState?.movieCard = movieCard;
         },
       ),
     );

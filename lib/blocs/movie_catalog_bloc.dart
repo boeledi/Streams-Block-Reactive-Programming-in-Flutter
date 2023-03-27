@@ -21,18 +21,18 @@ class MovieCatalogBloc implements BlocBase {
 
   ///
   /// Release date min
-  /// 
+  ///
   int _minReleaseDate = 2000;
 
   ///
   /// Release date max
-  /// 
+  ///
   int _maxReleaseDate = 2005;
 
   ///
   /// Total number of movies in the catalog
   ///
-  int _totalMovies = -1; 
+  int _totalMovies = -1;
 
   ///
   /// List of all the movie pages that have been fetched from Internet.
@@ -51,7 +51,8 @@ class MovieCatalogBloc implements BlocBase {
   ///
   /// We are going to need the list of movies to be displayed
   ///
-  PublishSubject<List<MovieCard>> _moviesController = PublishSubject<List<MovieCard>>();
+  final PublishSubject<List<MovieCard>> _moviesController =
+      PublishSubject<List<MovieCard>>();
   Sink<List<MovieCard>> get _inMoviesList => _moviesController.sink;
   Stream<List<MovieCard>> get outMoviesList => _moviesController.stream;
 
@@ -60,7 +61,7 @@ class MovieCatalogBloc implements BlocBase {
   /// so that, we will be able to check whether it has already been fetched
   /// If not, we will automatically fetch the page
   ///
-  PublishSubject<int> _indexController = PublishSubject<int>();
+  final PublishSubject<int> _indexController = PublishSubject<int>();
   Sink<int> get inMovieIndex => _indexController.sink;
 
   ///
@@ -68,9 +69,11 @@ class MovieCatalogBloc implements BlocBase {
   /// Let's consider listeners interested in knowing if a modification
   /// has been applied to the filters and total of movies, fetched so far
   ///
-  BehaviorSubject<int> _totalMoviesController = BehaviorSubject<int>(seedValue: 0);
-  BehaviorSubject<List<int>> _releaseDatesController = BehaviorSubject<List<int>>(seedValue: <int>[2000,2005]);
-  BehaviorSubject<int> _genreController = BehaviorSubject<int>(seedValue: 28);
+  final BehaviorSubject<int> _totalMoviesController =
+      BehaviorSubject<int>.seeded(0);
+  final BehaviorSubject<List<int>> _releaseDatesController =
+      BehaviorSubject<List<int>>.seeded(<int>[2000, 2005]);
+  final BehaviorSubject<int> _genreController = BehaviorSubject<int>.seeded(28);
   Sink<int> get _inTotalMovies => _totalMoviesController.sink;
   Stream<int> get outTotalMovies => _totalMoviesController.stream;
   Sink<List<int>> get _inReleaseDates => _releaseDatesController.sink;
@@ -81,7 +84,9 @@ class MovieCatalogBloc implements BlocBase {
   ///
   /// We also want to handle changes to the filters
   ///
-  BehaviorSubject<MovieFilters> _filtersController = BehaviorSubject<MovieFilters>(seedValue: MovieFilters(genre: 28, minReleaseDate: 2000, maxReleaseDate: 2005));
+  BehaviorSubject<MovieFilters> _filtersController =
+      BehaviorSubject<MovieFilters>.seeded(
+          MovieFilters(genre: 28, minReleaseDate: 2000, maxReleaseDate: 2005));
   Sink<MovieFilters> get inFilters => _filtersController.sink;
   Stream<MovieFilters> get outFilters => _filtersController.stream;
 
@@ -96,20 +101,19 @@ class MovieCatalogBloc implements BlocBase {
     // Therefore, we need to listen to such request in order to handle the request.
     //
     _indexController.stream
-                    // take some time before jumping into the request (there might be several ones in a row)
-                    .bufferTime(Duration(microseconds: 500))
-                    // and, do not update where this is no need
-                    .where((batch) => batch.isNotEmpty)
-                    .listen(_handleIndexes);
+        // take some time before jumping into the request (there might be several ones in a row)
+        .bufferTime(Duration(microseconds: 500))
+        // and, do not update where this is no need
+        .where((batch) => batch.isNotEmpty)
+        .listen(_handleIndexes);
 
     //
     // When filters are changed, we need to consider the changes
     //
     outFilters.listen(_handleFilters);
-
   }
 
-  void dispose(){
+  void dispose() {
     _moviesController.close();
     _indexController.close();
     _totalMoviesController.close();
@@ -126,26 +130,29 @@ class MovieCatalogBloc implements BlocBase {
   /// might end up with multiple pages (since a page contains max 20 movies)
   /// to be fetched from Internet.
   ///
-  void _handleIndexes(List<int> indexes){
+  void _handleIndexes(List<int> indexes) {
     // Iterate all the requested indexes and,
     // get the index of the page corresponding to the index
-    indexes.forEach((int index){
-      final int pageIndex = 1 + ((index+1) ~/ _moviesPerPage);
+    indexes.forEach((int index) {
+      final int pageIndex = 1 + ((index + 1) ~/ _moviesPerPage);
 
       // check if the page has already been fetched
-      if (!_fetchPages.containsKey(pageIndex)){
+      if (!_fetchPages.containsKey(pageIndex)) {
         // the page has NOT yet been fetched, so we need to
         // fetch it from Internet
         // (except if we are already currently fetching it)
-        if (!_pagesBeingFetched.contains(pageIndex)){
+        if (!_pagesBeingFetched.contains(pageIndex)) {
           // Remember that we are fetching it
           _pagesBeingFetched.add(pageIndex);
           // Fetch it
-          api.pagedList(pageIndex: pageIndex,
-                        genre: _genre,
-                        minYear: _minReleaseDate,
-                        maxYear: _maxReleaseDate)
-              .then((MoviePageResult fetchedPage) => _handleFetchedPage(fetchedPage, pageIndex));
+          api
+              .pagedList(
+                  pageIndex: pageIndex,
+                  genre: _genre,
+                  minYear: _minReleaseDate,
+                  maxYear: _maxReleaseDate)
+              .then((MoviePageResult fetchedPage) =>
+                  _handleFetchedPage(fetchedPage, pageIndex));
         }
       }
     });
@@ -155,13 +162,13 @@ class MovieCatalogBloc implements BlocBase {
   /// Once a page has been fetched from Internet, we need to
   /// 1) record it
   /// 2) notify everyone who might be interested in knowing it
-  /// 
-  void _handleFetchedPage(MoviePageResult page, int pageIndex){
+  ///
+  void _handleFetchedPage(MoviePageResult page, int pageIndex) {
     // Remember the page
     _fetchPages[pageIndex] = page;
     // Remove it from the ones being fetched
     _pagesBeingFetched.remove(pageIndex);
-   
+
     // Notify anyone interested in getting access to the content
     // of all pages... however, we need to only return the pages
     // which respect the sequence (since MovieCard are in sequence)
@@ -176,26 +183,26 @@ class MovieCatalogBloc implements BlocBase {
 
     // If the first page being fetched does not correspond to the first one, skip
     // and as soon as it will become available, it will be time to notify
-    if (minPageIndex == 1){
-      for (int i = 1; i <= maxPageIndex; i++){
-        if (!_fetchPages.containsKey(i)){
+    if (minPageIndex == 1) {
+      for (int i = 1; i <= maxPageIndex; i++) {
+        if (!_fetchPages.containsKey(i)) {
           // As soon as there is a hole, stop
           break;
         }
         // Add the list of fetched movies to the list
-        movies.addAll(_fetchPages[i].movies);
+        movies.addAll(_fetchPages[i]!.movies);
       }
     }
 
     // Take the opportunity to remember the number of movies
     // and notify who might be interested in knowing it
-    if (_totalMovies == -1){
+    if (_totalMovies == -1) {
       _totalMovies = page.totalResults;
       _inTotalMovies.add(_totalMovies);
     }
 
     // Only notify when there are movies
-    if (movies.length > 0){
+    if (movies.length > 0) {
       _inMoviesList.add(UnmodifiableListView<MovieCard>(movies));
     }
   }
@@ -203,7 +210,7 @@ class MovieCatalogBloc implements BlocBase {
   ///
   /// We want to set new filters
   ///
-  void _handleFilters(MovieFilters result){
+  void _handleFilters(MovieFilters result) {
     // First, let's record the new filter information
     _minReleaseDate = result.minReleaseDate;
     _maxReleaseDate = result.maxReleaseDate;

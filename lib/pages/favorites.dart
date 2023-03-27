@@ -7,7 +7,7 @@ import 'package:movies_streams/widgets/favorite_widget.dart';
 class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context);
+    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text('Favorites Page'),
@@ -19,10 +19,10 @@ class FavoritesPage extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<List<MovieCard>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
                 return FavoriteWidget(
-                  data: snapshot.data[index],
+                  data: snapshot.data![index],
                 );
               },
             );

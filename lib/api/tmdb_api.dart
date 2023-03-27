@@ -7,15 +7,16 @@ import 'package:movies_streams/models/movie_page_result.dart';
 
 ///
 /// TMDB API
-/// 
+///
 /// To get an API key, it is FREE => go to "https://www.themoviedb.org/"
-/// 
+///
 
 class TmdbApi {
-  static const String TMDB_API_KEY = "PUT YOUR KEY, HERE";
+  // static const String TMDB_API_KEY = "PUT YOUR KEY, HERE";
+  static const String TMDB_API_KEY = "16d95c54251452dce44e0030c9777a2f";
   static const String baseUrl = 'api.themoviedb.org';
   final String imageBaseUrl = 'http://image.tmdb.org/t/p/w185/';
-  final _httpClient = new HttpClient();
+  final _httpClient = HttpClient();
 
   ///
   /// Returns the list of movies/tv-show, based on criteria:
@@ -24,7 +25,13 @@ class TmdbApi {
   /// [minYear, maxYear]: release dates range
   /// [genre]: genre
   ///
-  Future<MoviePageResult> pagedList({String type: "movie", int pageIndex: 1, int minYear: 2016, int maxYear: 2017, int genre: 28}) async {
+  Future<MoviePageResult> pagedList({
+    String type = "movie",
+    int pageIndex = 1,
+    int minYear = 2016,
+    int maxYear = 2017,
+    int genre = 28,
+  }) async {
     var uri = Uri.https(
       baseUrl,
       '3/discover/$type',
@@ -53,7 +60,7 @@ class TmdbApi {
   ///
   /// Returns the list of all genres
   ///
-  Future<MovieGenresList> movieGenres({String type: "movie"}) async {
+  Future<MovieGenresList> movieGenres({String type = "movie"}) async {
     var uri = Uri.https(
       baseUrl,
       '3/genre/$type/list',

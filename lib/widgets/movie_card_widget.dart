@@ -9,12 +9,12 @@ import 'package:movies_streams/models/movie_card.dart';
 
 class MovieCardWidget extends StatefulWidget {
   MovieCardWidget({
-    Key key,
-    @required this.movieCard,
-    @required this.favoritesStream,
-    @required this.onPressed,
-    this.noHero: false,
-  }) : super(key: key);
+    super.key,
+    required this.movieCard,
+    required this.favoritesStream,
+    required this.onPressed,
+    this.noHero = false,
+  });
 
   final MovieCard movieCard;
   final VoidCallback onPressed;
@@ -26,7 +26,7 @@ class MovieCardWidget extends StatefulWidget {
 }
 
 class MovieCardWidgetState extends State<MovieCardWidget> {
-  FavoriteMovieBloc _bloc;
+  late FavoriteMovieBloc _bloc;
 
   ///
   /// In order to determine whether this particular Movie is
@@ -34,7 +34,7 @@ class MovieCardWidgetState extends State<MovieCardWidget> {
   /// that gives us the list of all favorites to THIS instance
   /// of the BLoC
   ///
-  StreamSubscription _subscription;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
@@ -69,24 +69,25 @@ class MovieCardWidgetState extends State<MovieCardWidget> {
   }
 
   void _disposeBloc() {
-    _subscription.cancel();
+    _subscription?.cancel();
     _bloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context);
+    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context)!;
     List<Widget> children = <Widget>[
       ClipRect(
         clipper: _SquareClipper(),
         child: widget.noHero
-               ? Image.network(api.imageBaseUrl + widget.movieCard.posterPath,
-              fit: BoxFit.cover)
-               : Hero(
-          child: Image.network(api.imageBaseUrl + widget.movieCard.posterPath,
-              fit: BoxFit.cover),
-          tag: 'movie_${widget.movieCard.id}',
-        ),
+            ? Image.network(api.imageBaseUrl + widget.movieCard.posterPath,
+                fit: BoxFit.cover)
+            : Hero(
+                child: Image.network(
+                    api.imageBaseUrl + widget.movieCard.posterPath,
+                    fit: BoxFit.cover),
+                tag: 'movie_${widget.movieCard.id}',
+              ),
       ),
       Container(
         decoration: _buildGradientBackground(),
@@ -190,7 +191,7 @@ class MovieCardWidgetState extends State<MovieCardWidget> {
 class _SquareClipper extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
-    return new Rect.fromLTWH(0.0, 0.0, size.width, size.width);
+    return Rect.fromLTWH(0.0, 0.0, size.width, size.width);
   }
 
   @override

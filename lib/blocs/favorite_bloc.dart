@@ -5,9 +5,7 @@ import 'package:movies_streams/blocs/bloc_provider.dart';
 import 'package:movies_streams/models/movie_card.dart';
 import 'package:rxdart/rxdart.dart';
 
-
 class FavoriteBloc implements BlocBase {
-
   ///
   /// Unique list of all favorite movies
   ///
@@ -17,38 +15,42 @@ class FavoriteBloc implements BlocBase {
   ///
   /// Interface that allows to add a new favorite movie
   ///
-  BehaviorSubject<MovieCard> _favoriteAddController = new BehaviorSubject<MovieCard>();
+  final BehaviorSubject<MovieCard> _favoriteAddController =
+      BehaviorSubject<MovieCard>();
   Sink<MovieCard> get inAddFavorite => _favoriteAddController.sink;
 
   ///
   /// Interface that allows to remove a movie from the list of favorites
   ///
-  BehaviorSubject<MovieCard> _favoriteRemoveController = new BehaviorSubject<MovieCard>();
+  final BehaviorSubject<MovieCard> _favoriteRemoveController =
+      BehaviorSubject<MovieCard>();
   Sink<MovieCard> get inRemoveFavorite => _favoriteRemoveController.sink;
 
   ///
   /// Interface that allows to get the total number of favorites
   ///
-  BehaviorSubject<int> _favoriteTotalController = new BehaviorSubject<int>(seedValue: 0);
+  final BehaviorSubject<int> _favoriteTotalController =
+      BehaviorSubject<int>.seeded(0);
   Sink<int> get _inTotalFavorites => _favoriteTotalController.sink;
   Stream<int> get outTotalFavorites => _favoriteTotalController.stream;
 
   ///
   /// Interface that allows to get the list of all favorite movies
   ///
-  BehaviorSubject<List<MovieCard>> _favoritesController = new BehaviorSubject<List<MovieCard>>(seedValue: []);
-  Sink<List<MovieCard>> get _inFavorites =>_favoritesController.sink;
-  Stream<List<MovieCard>> get outFavorites =>_favoritesController.stream;
+  final BehaviorSubject<List<MovieCard>> _favoritesController =
+      BehaviorSubject<List<MovieCard>>.seeded([]);
+  Sink<List<MovieCard>> get _inFavorites => _favoritesController.sink;
+  Stream<List<MovieCard>> get outFavorites => _favoritesController.stream;
 
   ///
   /// Constructor
   ///
-  FavoriteBloc(){
+  FavoriteBloc() {
     _favoriteAddController.listen(_handleAddFavorite);
     _favoriteRemoveController.listen(_handleRemoveFavorite);
   }
 
-  void dispose(){
+  void dispose() {
     _favoriteAddController.close();
     _favoriteRemoveController.close();
     _favoriteTotalController.close();
@@ -57,20 +59,20 @@ class FavoriteBloc implements BlocBase {
 
   // ############# HANDLING  #####################
 
-  void _handleAddFavorite(MovieCard movieCard){
+  void _handleAddFavorite(MovieCard movieCard) {
     // Add the movie to the list of favorite ones
     _favorites.add(movieCard);
 
     _notify();
   }
 
-  void _handleRemoveFavorite(MovieCard movieCard){
+  void _handleRemoveFavorite(MovieCard movieCard) {
     _favorites.remove(movieCard);
 
     _notify();
   }
 
-  void _notify(){
+  void _notify() {
     // Send to whomever is interested...
     // The total number of favorites
     _inTotalFavorites.add(_favorites.length);

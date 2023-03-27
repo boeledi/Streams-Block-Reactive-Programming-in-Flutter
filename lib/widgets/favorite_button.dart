@@ -5,25 +5,24 @@ import 'package:movies_streams/pages/favorites.dart';
 
 class FavoriteButton extends StatelessWidget {
   FavoriteButton({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
+    super.key,
+    required this.child,
+  });
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context);
-    return RaisedButton(
+    final FavoriteBloc bloc = BlocProvider.of<FavoriteBloc>(context)!;
+    return ElevatedButton(
       onPressed: () {
-        Navigator
-            .of(context)
+        Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return FavoritesPage();
         }));
       },
       child: Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.none,
         children: [
           child,
           Positioned(

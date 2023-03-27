@@ -6,20 +6,22 @@ import 'package:movies_streams/widgets/movie_details_widget.dart';
 
 class MovieDetailsContainer extends StatefulWidget {
   MovieDetailsContainer({
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   MovieDetailsContainerState createState() => MovieDetailsContainerState();
 }
 
 class MovieDetailsContainerState extends State<MovieDetailsContainer> {
-  MovieCard _movieCard;
+  MovieCard? _movieCard;
 
   set movieCard(MovieCard newMovieCard) {
-    setState(() {
-      _movieCard = newMovieCard;
-    });
+    if (mounted) {
+      setState(() {
+        _movieCard = newMovieCard;
+      });
+    }
   }
 
   @override
@@ -29,9 +31,10 @@ class MovieDetailsContainerState extends State<MovieDetailsContainer> {
             child: Text('Click on a movie to see the details...'),
           )
         : MovieDetailsWidget(
-            movieCard: _movieCard,
+            movieCard: _movieCard!,
             boxFit: BoxFit.contain,
-            favoritesStream: BlocProvider.of<FavoriteBloc>(context).outFavorites,
+            favoritesStream:
+                BlocProvider.of<FavoriteBloc>(context)!.outFavorites,
           );
   }
 }
